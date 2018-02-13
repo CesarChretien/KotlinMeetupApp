@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "216613176600",
+    "firebase_url": "https://kotlinmeetupapp.firebaseio.com",
+    "project_id": "kotlinmeetupapp",
+    "storage_bucket": "kotlinmeetupapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216613176600:android:ab00bdb5404412ac",
+        "android_client_info": {
+          "package_name": "com.example.cesarchretien.kotlinmeetupapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216613176600-ranif3g2djohq788s8bv3qs962a9rqhk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cesarchretien.kotlinmeetupapp",
+            "certificate_hash": "8c53ab3cb82ef20e7f7dc2c0648d2d51be60b7a3"
+          }
+        },
+        {
+          "client_id": "216613176600-ee3o273813cbfo059vf2pcev563u0ak3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmcde9AEV0cqiBT96hzRvSTZ-V1Zf5O2Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216613176600-ee3o273813cbfo059vf2pcev563u0ak3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
