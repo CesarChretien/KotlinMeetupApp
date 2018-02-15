@@ -7,11 +7,13 @@ import android.support.annotation.MenuRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +21,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 const val SIGN_IN_REQUEST_CODE = 200
 
 class MainActivity : AppCompatActivity() {
+
+    private val query = FirebaseDatabase.getInstance().reference.limitToLast(50)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +38,11 @@ class MainActivity : AppCompatActivity() {
         else {
             //User is already signed in.
             parentView.brieflyShowSnackbar("Welcome ${FirebaseAuth.getInstance().currentUser?.displayName ?: "user"}")
+            displayChatMessages()
         }
 
-        fab.setOnClickListener { _ ->
-            FirebaseDatabase.getInstance()
-                    .reference
-                    .push()
-                    .setValue(ChatMessage(editText.text.toString(), FirebaseAuth.getInstance().currentUser?.displayName ?: "Unknown"))
-
+        fab.setOnClickListener {
+            query.ref.push().setValue(ChatMessage(editText.text.toString(), FirebaseAuth.getInstance().currentUser?.displayName ?: "Unknown"))
             editText.clear()
         }
     }
@@ -68,9 +69,10 @@ class MainActivity : AppCompatActivity() {
         if (item?.itemId == R.id.log_out) {
             AuthUI.getInstance()
                     .signOut(this)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
                             parentView.brieflyShowSnackbar("You have been signed out.")
+                            finish()
                         }
                     }
         }
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayChatMessages() {
-
+        recyclerView.adapter = newAdapter()
     }
 
     private fun View.brieflyShowSnackbar(message: String) = Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
@@ -91,5 +93,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun TextView.clear() {
         this.text = ""
+    }
+
+    private fun newAdapter(): RecyclerView.Adapter<ChatMessageHolder> {
+        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
+                .setLifecycleOwner(this)
+                .setQuery(query, ChatMessage::class.java)
+                .build()
+
+        return ChatMessageAdapter(options).addDataListeners {
+            onItemRangeInserted { positionStart, itemCount -> recyclerView.smoothScrollToPosition(it.itemCount) }
+        }
+    }
+
+    private inline fun <T : RecyclerView.ViewHolder> RecyclerView.Adapter<T>.addDataListeners(f: CustomDataObserver.(RecyclerView.Adapter<T>) -> CustomDataObserver) = this.apply {
+        val customDataObserver = CustomDataObserver()
+        registerAdapterDataObserver(customDataObserver.f(this))
     }
 }
