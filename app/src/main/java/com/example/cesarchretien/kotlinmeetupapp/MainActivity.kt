@@ -4,14 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.MenuRes
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -23,13 +20,14 @@ const val SIGN_IN_REQUEST_CODE = 200
 class MainActivity : AppCompatActivity() {
 
     private val query = FirebaseDatabase.getInstance().reference.limitToLast(50)
+    private val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        if (FirebaseAuth.getInstance().currentUser == null) {
+        if (user == null) {
             //Start sign up/sign in activity
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -37,12 +35,12 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             //User is already signed in.
-            parentView.brieflyShowSnackbar("Welcome ${FirebaseAuth.getInstance().currentUser?.displayName ?: "user"}")
+            parentView.brieflyShowSnackbar("Welcome ${user.displayName ?: "user"}")
             displayChatMessages()
         }
 
         fab.setOnClickListener {
-            query.ref.push().setValue(ChatMessage(editText.text.toString(), FirebaseAuth.getInstance().currentUser?.displayName ?: "Unknown"))
+            query.ref.push().setValue(ChatMessage(editText.text.toString(), user?.displayName ?: "Unknown"))
             editText.clear()
         }
     }
@@ -70,10 +68,7 @@ class MainActivity : AppCompatActivity() {
             AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            parentView.brieflyShowSnackbar("You have been signed out.")
-                            finish()
-                        }
+                        if (it.isSuccessful) finish()
                     }
         }
 
@@ -84,30 +79,21 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = newAdapter()
     }
 
-    private fun View.brieflyShowSnackbar(message: String) = Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
-
-    private fun Menu?.inflate(@MenuRes menuRes: Int): Boolean {
-        menuInflater.inflate(menuRes, this)
-        return true
-    }
-
-    private fun TextView.clear() {
-        this.text = ""
-    }
-
     private fun newAdapter(): RecyclerView.Adapter<ChatMessageHolder> {
         val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
                 .setLifecycleOwner(this)
                 .setQuery(query, ChatMessage::class.java)
                 .build()
 
-        return ChatMessageAdapter(options).addDataListeners {
-            onItemRangeInserted { positionStart, itemCount -> recyclerView.smoothScrollToPosition(it.itemCount) }
+        return ChatMessageAdapter(options).apply {
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = recyclerView.smoothScrollToPosition(this@apply.itemCount)
+            })
         }
     }
 
-    private inline fun <T : RecyclerView.ViewHolder> RecyclerView.Adapter<T>.addDataListeners(f: CustomDataObserver.(RecyclerView.Adapter<T>) -> CustomDataObserver) = this.apply {
-        val customDataObserver = CustomDataObserver()
-        registerAdapterDataObserver(customDataObserver.f(this))
+    private fun Menu?.inflate(@MenuRes menuRes: Int): Boolean {
+        menuInflater.inflate(menuRes, this)
+        return true
     }
 }
