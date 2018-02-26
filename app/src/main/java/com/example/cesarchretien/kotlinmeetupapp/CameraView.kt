@@ -15,15 +15,13 @@ private const val TAG = "CameraViewTag"
 
 class CameraView(context: Context, attributeSet: AttributeSet? = null) : SurfaceView(context, attributeSet), SurfaceHolder.Callback {
 
-    private val cameraInstance: Camera? by lazy {
-        try {
-            Log.d(TAG, "Camera creation!")
-            Camera.open()
-        }
-        catch (e: Exception) {
-            null
-        }
+    private val cameraInstance: Camera? = try {
+        Log.d(TAG, "Camera creation!")
+        Camera.open()
+    } catch (e: Exception) {
+        null
     }
+
 
     init {
         holder?.apply {
@@ -58,21 +56,15 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
     }
 
 
-
-    fun getPictureIntent() {
-        cameraInstance?.takePicture(null, null, { data, camera ->
-            val cameraResult = Intent()
-            cameraResult
-            this@CameraView.apply {
-
-            }
+    fun onPictureTaken(action: (ByteArray) -> Unit) {
+        cameraInstance?.takePicture(null, null, { data, _ ->
+            action(data)
         })
     }
 
     private fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
         action()
-    }
-    catch (e: Exception) {
+    } catch (e: Exception) {
         Log.d(TAG, e.message)
     }
 }

@@ -12,11 +12,11 @@ import kotlinx.android.synthetic.main.message_layout.*
  */
 class ChatMessageHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    infix fun populateWith(chatMessage: ChatMessage) {
-        userNameView.text = chatMessage.messageUser
-        messageView.text = chatMessage.messageText
+    infix fun populateWith(chatMessage: Message) {
+//        userNameView.text = chatMessage.messageUser
+//        messageView.text = chatMessage.messageText
 
-        if (FirebaseAuth.getInstance().currentUser?.displayName == chatMessage.messageUser) {
+        if (FirebaseAuth.getInstance().currentUser?.displayName == ""/*chatMessage.messageUser*/) {
             messageCardView.apply {
                 setLayoutGravity(Gravity.END)
                 setCardBackgroundColorByRes(R.color.colorActiveUser)

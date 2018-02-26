@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.annotation.MenuRes
 import android.support.v4.app.ActivityCompat
@@ -11,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -26,7 +29,7 @@ const val CAMERA_REQUEST_CODE = 100
 const val MAXIMUM_MESSAGES = 50
 const val DATABASE_NAME = "chats"
 
-class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
+class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
         if (firebaseAuth.currentUser != null) {
@@ -71,8 +74,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                                 ?: "Unknown"))
 
                 editText.clear()
-            }
-            else {
+            } else {
                 startCamera()
             }
         }
@@ -82,13 +84,11 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             //You have camera permission, so time to take a picture!
             startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
-        }
-        else {
+        } else {
             //No camera permission, so you need to ask for it first.
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                 parentView.brieflyShowSnackbar("Explain it to me please.")
-            }
-            else {
+            } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
             }
         }
@@ -109,11 +109,18 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
         if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             displayChatMessages()
-        }
-        else if (requestCode == CAMERA_REQUEST_CODE) {
-            parentView.brieflyShowSnackbar("Came back from camera.")
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val byteArrayExtra = data?.getByteArrayExtra("picture")
+                val thumbnail: Bitmap? = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra?.size ?: 0)
+
+                parentView.brieflyShowSnackbar("Image received ${if(thumbnail == null) "un" else ""}successfully")
+            }
         }
     }
+
+    private fun ByteArray.print(): String = fold("") { acc, byte -> acc + byte.toString() }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 
