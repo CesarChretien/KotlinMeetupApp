@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -68,11 +67,7 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             val messageText = editText.text.toString()
 
             if (messageText.isNotEmpty()) {
-                query.ref
-                        .push()
-                        .setValue(ChatMessage(messageText, user()?.displayName
-                                ?: "Unknown"))
-
+                sendMessage { user -> ChatMessage(messageText, user) }
                 editText.clear()
             } else {
                 startCamera()
@@ -111,16 +106,18 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             displayChatMessages()
         } else if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val byteArrayExtra = data?.getByteArrayExtra("picture")
-                val thumbnail: Bitmap? = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra?.size ?: 0)
+                data?.getByteArrayExtra("picture")?.also {
+                    sendMessage { user -> ImageMessage(it, messageUser = user) }
+                }
 
-                parentView.brieflyShowSnackbar("Image received ${if(thumbnail == null) "un" else ""}successfully")
+//                val thumbnail: Bitmap? = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra?.size ?: 0)
+//                parentView.brieflyShowSnackbar("Image received ${if(thumbnail == null) "un" else ""}successfully")
             }
         }
     }
 
-    private fun ByteArray.print(): String = fold("") { acc, byte -> acc + byte.toString() }
-
+    private fun sendMessage(action: (user: String) -> Message) = query.ref.push().setValue(action(user()?.displayName
+            ?: "Unknown"))
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 
@@ -140,13 +137,13 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         recyclerView.adapter = newAdapter()
     }
 
-    private fun newAdapter(): RecyclerView.Adapter<ChatMessageHolder> {
-        val options = FirebaseRecyclerOptions.Builder<ChatMessage>()
+    private fun newAdapter(): RecyclerView.Adapter<MessageHolder> {
+        val options = FirebaseRecyclerOptions.Builder<Message>()
                 .setLifecycleOwner(this)
-                .setQuery(query, ChatMessage::class.java)
+                .setQuery(query, Message::class.java)
                 .build()
 
-        return ChatMessageAdapter(options).apply {
+        return MessageAdapter(options).apply {
             registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = recyclerView.smoothScrollToPosition(this@apply.itemCount)
             })

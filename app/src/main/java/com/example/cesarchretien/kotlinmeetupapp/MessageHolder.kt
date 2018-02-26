@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.message_layout.*
 /**
  * Created by cesarchretien on 14/02/2018.
  */
-class ChatMessageHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class MessageHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     infix fun populateWith(chatMessage: Message) {
 //        userNameView.text = chatMessage.messageUser
