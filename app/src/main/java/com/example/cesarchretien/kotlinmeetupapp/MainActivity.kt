@@ -1,9 +1,13 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.MenuRes
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -16,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
+const val CAMERA_PERMISSION_REQUEST_CODE = 300
 const val SIGN_IN_REQUEST_CODE = 200
 const val CAMERA_REQUEST_CODE = 100
 const val MAXIMUM_MESSAGES = 50
@@ -68,7 +73,31 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                 editText.clear()
             }
             else {
-                startActivityForResult(Intent(this, CameraActivity::class.java), 100)
+                startCamera()
+            }
+        }
+    }
+
+    private fun startCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            //You have camera permission, so time to take a picture!
+            startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
+        }
+        else {
+            //No camera permission, so you need to ask for it first.
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                parentView.brieflyShowSnackbar("Explain it to me please.")
+            }
+            else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
             }
         }
     }
