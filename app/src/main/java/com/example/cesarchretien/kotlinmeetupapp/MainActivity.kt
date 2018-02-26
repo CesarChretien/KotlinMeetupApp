@@ -12,52 +12,77 @@ import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val SIGN_IN_REQUEST_CODE = 200
+const val CAMERA_REQUEST_CODE = 100
+const val MAXIMUM_MESSAGES = 50
+const val DATABASE_NAME = "chats"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
-    private val query = FirebaseDatabase.getInstance().reference.limitToLast(50)
-    private val user = FirebaseAuth.getInstance().currentUser
+    override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
+        if (firebaseAuth.currentUser != null) {
+            displayChatMessages()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (user() == null) {
+            startActivityForResult(AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .build(), SIGN_IN_REQUEST_CODE)
+        }
+
+        FirebaseAuth.getInstance().addAuthStateListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        FirebaseAuth.getInstance().removeAuthStateListener(this)
+    }
+
+    private val query = FirebaseDatabase
+            .getInstance()
+            .reference
+            .child(DATABASE_NAME)
+            .limitToLast(MAXIMUM_MESSAGES)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        if (user == null) {
-            //Start sign up/sign in activity
-            startActivityForResult(AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .build(), SIGN_IN_REQUEST_CODE)
-        }
-        else {
-            //User is already signed in.
-            parentView.brieflyShowSnackbar("Welcome ${user.displayName ?: "user"}")
-            displayChatMessages()
-        }
-
         fab.setOnClickListener {
-            query.ref.push().setValue(ChatMessage(editText.text.toString(), user?.displayName ?: "Unknown"))
-            editText.clear()
+            val messageText = editText.text.toString()
+
+            if (messageText.isNotEmpty()) {
+                query.ref
+                        .push()
+                        .setValue(ChatMessage(messageText, user()?.displayName
+                                ?: "Unknown"))
+
+                editText.clear()
+            }
+            else {
+                startActivityForResult(Intent(this, CameraActivity::class.java), 100)
+            }
         }
     }
+
+    private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == SIGN_IN_REQUEST_CODE) {
-
-            val resultIsOk = resultCode == Activity.RESULT_OK
-            val snackbarMessage = if (resultIsOk) "Successfully signed in. Welcome!" else "We couldn't sign you in. Please try again later."
-
-            parentView.brieflyShowSnackbar(snackbarMessage)
-
-            if (resultIsOk) {
-                displayChatMessages()
-            }
+        if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            displayChatMessages()
+        }
+        else if (requestCode == CAMERA_REQUEST_CODE) {
+            parentView.brieflyShowSnackbar("Came back from camera.")
         }
     }
 
