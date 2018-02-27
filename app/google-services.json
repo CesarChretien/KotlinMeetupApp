@@ -15,11 +15,63 @@
       },
       "oauth_client": [
         {
+          "client_id": "216613176600-2uchd1us0mvcc9ltehe5m3r42asslurn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cesarchretien.kotlinmeetupapp",
+            "certificate_hash": "1604f3ee4fef23b231155327488ce21aa1f5d723"
+          }
+        },
+        {
           "client_id": "216613176600-ranif3g2djohq788s8bv3qs962a9rqhk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.cesarchretien.kotlinmeetupapp",
             "certificate_hash": "8c53ab3cb82ef20e7f7dc2c0648d2d51be60b7a3"
+          }
+        },
+        {
+          "client_id": "216613176600-ee3o273813cbfo059vf2pcev563u0ak3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmcde9AEV0cqiBT96hzRvSTZ-V1Zf5O2Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216613176600-ee3o273813cbfo059vf2pcev563u0ak3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216613176600:android:e126473dfab0d941",
+        "android_client_info": {
+          "package_name": "com.klm.camerabot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216613176600-qmct2sdnj468mg531rcac6fhbm1b9ede.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.klm.camerabot",
+            "certificate_hash": "38dbe1b6966679b6228ea848d1df605adbd7683f"
           }
         },
         {

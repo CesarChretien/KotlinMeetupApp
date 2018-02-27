@@ -5,24 +5,31 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/messageCardView"
+        android:id="@+id/chatMessageCardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
 
         <LinearLayout
-            android:id="@+id/messageContainerView"
+            android:id="@+id/chatMessageContainerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/userNameView"
+                android:id="@+id/chatUserNameView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 tools:text="Cesar" />
+
+            <TextView
+                android:id="@+id/chatUserMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:text="Fancy meeting you here!"/>
 
         </LinearLayout>
 

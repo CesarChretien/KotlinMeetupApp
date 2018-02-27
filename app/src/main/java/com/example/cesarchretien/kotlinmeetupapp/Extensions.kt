@@ -5,13 +5,13 @@ import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import java.nio.charset.StandardCharsets
 
 /**
  * Created by cesarchretien on 21/02/2018.
@@ -35,6 +35,6 @@ fun View.setLayoutGravity(gravity: Int) {
 
 fun ViewGroup.inflateChild(@LayoutRes layoutRes: Int): View = LayoutInflater.from(context).inflate(layoutRes, this, false)
 
-fun ByteArray.encode(): String = String(this, StandardCharsets.ISO_8859_1)
+fun ByteArray.encode(): String = Base64.encodeToString(this, Base64.DEFAULT)
 
-fun String.decode(): ByteArray = this.toByteArray(StandardCharsets.ISO_8859_1)
+fun String.decode(): ByteArray = Base64.decode(this, Base64.DEFAULT)

@@ -6,12 +6,12 @@ import java.util.*
  * Created by cesarchretien on 08/02/2018.
  */
 data class Message(
-        val messageText: String = "",
-        val messageUser: String = "",
-        val messageTime: Long = Date().time,
-        val messageType: MessageType = MessageType.TEXT
-                  )
+        val text: String = "",
+        val user: String = "",
+        val time: Long = Date().time,
+        val type: MessageType = MessageType.TEXT
+)
 
-enum class MessageType {
+public enum class MessageType {
     TEXT, IMAGE
 }
