@@ -115,7 +115,6 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         else if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 data?.getByteArrayExtra("picture")?.also {
-                    Log.d("DataArray", it.joinToString { "$it" })
                     sendMessage { user -> Message(it.encode(), user = user, type = MessageType.IMAGE) }
                 }
             }

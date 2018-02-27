@@ -58,9 +58,7 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
     }
 
     inline fun onPictureTaken(crossinline action: (ByteArray) -> Unit) {
-        cameraInstance?.takePicture(null, null, { data, _ ->
-            Log.d("DataArray", data.joinToString { "$it" })
-            action(data) })
+        cameraInstance?.takePicture(null, null, { data, _ -> action(data) })
     }
 
     private inline fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
