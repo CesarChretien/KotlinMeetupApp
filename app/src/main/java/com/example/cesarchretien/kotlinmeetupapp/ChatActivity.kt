@@ -4,8 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.annotation.MenuRes
 import android.support.v4.app.ActivityCompat
@@ -13,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -28,6 +27,8 @@ const val CAMERA_REQUEST_CODE = 100
 const val MAXIMUM_MESSAGES = 50
 const val DATABASE_NAME = "chats"
 
+private const val TAG = "ChatActivity"
+
 class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
@@ -38,14 +39,13 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     override fun onStart() {
         super.onStart()
+        FirebaseAuth.getInstance().addAuthStateListener(this)
 
         if (user() == null) {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .build(), SIGN_IN_REQUEST_CODE)
         }
-
-        FirebaseAuth.getInstance().addAuthStateListener(this)
     }
 
     override fun onStop() {
@@ -67,9 +67,10 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             val messageText = editText.text.toString()
 
             if (messageText.isNotEmpty()) {
-                sendMessage { user -> ChatMessage(messageText, user) }
+                sendMessage { user -> Message(messageText, user) }
                 editText.clear()
-            } else {
+            }
+            else {
                 startCamera()
             }
         }
@@ -78,12 +79,14 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     private fun startCamera() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             //You have camera permission, so time to take a picture!
-            startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
-        } else {
+            startCameraForResult()
+        }
+        else {
             //No camera permission, so you need to ask for it first.
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                 parentView.brieflyShowSnackbar("Explain it to me please.")
-            } else {
+            }
+            else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
             }
         }
@@ -92,9 +95,13 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
+                startCameraForResult()
             }
         }
+    }
+
+    private fun startCameraForResult() {
+        startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
     }
 
     private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
@@ -104,14 +111,12 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
         if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             displayChatMessages()
-        } else if (requestCode == CAMERA_REQUEST_CODE) {
+        }
+        else if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                data?.getByteArrayExtra("picture")?.also {
-                    sendMessage { user -> ImageMessage(it, messageUser = user) }
+                data?.getStringExtra("picture")?.also {
+                    sendMessage { user -> Message(it, messageUser = user, messageType = MessageType.IMAGE) }
                 }
-
-//                val thumbnail: Bitmap? = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra?.size ?: 0)
-//                parentView.brieflyShowSnackbar("Image received ${if(thumbnail == null) "un" else ""}successfully")
             }
         }
     }
@@ -145,6 +150,30 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
         return MessageAdapter(options).apply {
             registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    Log.d(TAG, "onChanged()")
+                }
+
+                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeRemoved(positionStart, itemCount)
+                    Log.d(TAG, "onItemRangeRemoved()")
+                }
+
+                override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                    super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+                    Log.d(TAG, "onItemRangeMoved()")
+                }
+
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeChanged(positionStart, itemCount)
+                    Log.d(TAG, "onItemRangeChanged()")
+                }
+
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+                    Log.d(TAG, "onItemRangeChangedWithPayload()")
+                }
+
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = recyclerView.smoothScrollToPosition(this@apply.itemCount)
             })
         }

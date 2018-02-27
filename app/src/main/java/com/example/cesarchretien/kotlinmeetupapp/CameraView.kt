@@ -1,7 +1,6 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
 import android.content.Context
-import android.content.Intent
 import android.hardware.Camera
 import android.util.AttributeSet
 import android.util.Log
@@ -15,13 +14,16 @@ private const val TAG = "CameraViewTag"
 
 class CameraView(context: Context, attributeSet: AttributeSet? = null) : SurfaceView(context, attributeSet), SurfaceHolder.Callback {
 
-    private val cameraInstance: Camera? = try {
-        Log.d(TAG, "Camera creation!")
-        Camera.open()
-    } catch (e: Exception) {
-        null
+    val cameraInstance: Camera? by lazy {
+        try {
+            Log.d(TAG, "Camera creation!")
+            Camera.open()
+        }
+        catch (e: Exception) {
+            Log.d(TAG, "Failed to create camera instance...")
+            null
+        }
     }
-
 
     init {
         holder?.apply {
@@ -55,16 +57,16 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
         }
     }
 
-
-    fun onPictureTaken(action: (ByteArray) -> Unit) {
-        cameraInstance?.takePicture(null, null, { data, _ ->
-            action(data)
-        })
+    inline fun onPictureTaken(crossinline action: (ByteArray) -> Unit) {
+        cameraInstance?.takePicture(null, null, { data, _ -> action(data) })
     }
 
-    private fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
+    private inline fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
         action()
-    } catch (e: Exception) {
+    }
+    catch (e: Exception) {
         Log.d(TAG, e.message)
     }
+
+    private fun log(any: Any): Int = Log.d(TAG, any.toString())
 }

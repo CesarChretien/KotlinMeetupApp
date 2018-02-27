@@ -5,16 +5,13 @@ import java.util.*
 /**
  * Created by cesarchretien on 08/02/2018.
  */
-sealed class Message
-
-data class ChatMessage(
+data class Message(
         val messageText: String = "",
         val messageUser: String = "",
-        val messageTime: Long = Date().time
-) : Message()
+        val messageTime: Long = Date().time,
+        val messageType: MessageType = MessageType.TEXT
+                  )
 
-data class ImageMessage(
-        val byteArray: ByteArray = byteArrayOf(),
-        val messageUser: String = "",
-        val messageTime: Long = Date().time
-) : Message()
+enum class MessageType {
+    TEXT, IMAGE
+}

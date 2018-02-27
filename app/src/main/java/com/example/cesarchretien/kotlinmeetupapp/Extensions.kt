@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import java.nio.charset.StandardCharsets
 
 /**
  * Created by cesarchretien on 21/02/2018.
@@ -33,3 +34,7 @@ fun View.setLayoutGravity(gravity: Int) {
 }
 
 fun ViewGroup.inflateChild(@LayoutRes layoutRes: Int): View = LayoutInflater.from(context).inflate(layoutRes, this, false)
+
+fun ByteArray.encode(): String = String(this, StandardCharsets.ISO_8859_1)
+
+fun String.decode(): ByteArray = this.toByteArray(StandardCharsets.ISO_8859_1)

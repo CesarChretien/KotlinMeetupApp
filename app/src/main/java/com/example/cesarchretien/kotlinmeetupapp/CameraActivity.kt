@@ -20,7 +20,7 @@ class CameraActivity : AppCompatActivity() {
 
         cameraButton.getPictureOnClick {
             setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra("picture", it)
+                putExtra("picture", it.encode())
             })
             finish()
         }
