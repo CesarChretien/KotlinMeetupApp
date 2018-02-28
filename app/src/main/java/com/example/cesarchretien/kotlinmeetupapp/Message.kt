@@ -12,6 +12,6 @@ data class Message(
         val type: MessageType = MessageType.TEXT
 )
 
-public enum class MessageType {
+enum class MessageType {
     TEXT, IMAGE
 }
