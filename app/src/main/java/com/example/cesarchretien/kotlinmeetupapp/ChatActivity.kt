@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -150,30 +149,6 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
         return MessageAdapter(options).apply {
             registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-                override fun onChanged() {
-                    super.onChanged()
-                    Log.d(TAG, "onChanged()")
-                }
-
-                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                    super.onItemRangeRemoved(positionStart, itemCount)
-                    Log.d(TAG, "onItemRangeRemoved()")
-                }
-
-                override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                    super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-                    Log.d(TAG, "onItemRangeMoved()")
-                }
-
-                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                    super.onItemRangeChanged(positionStart, itemCount)
-                    Log.d(TAG, "onItemRangeChanged()")
-                }
-
-                override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-                    Log.d(TAG, "onItemRangeChangedWithPayload()")
-                }
-
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = recyclerView.smoothScrollToPosition(this@apply.itemCount)
             })
         }
