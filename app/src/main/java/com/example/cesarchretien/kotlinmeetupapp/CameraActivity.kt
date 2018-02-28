@@ -26,7 +26,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun Button.getPictureOnClick(action: (ByteArray) -> Unit) {
+    private inline fun Button.getPictureOnClick(crossinline action: (encodedImage: ByteArray) -> Unit) {
         setOnClickListener {
             cameraView.onPictureTaken { action(it) }
         }

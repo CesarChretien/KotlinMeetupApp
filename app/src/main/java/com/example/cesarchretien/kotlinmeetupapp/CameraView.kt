@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
+
 /**
  * Created by cesarchretien on 23/02/2018.
  */
@@ -57,8 +58,10 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
         }
     }
 
-    inline fun onPictureTaken(crossinline action: (ByteArray) -> Unit) {
-        cameraInstance?.takePicture(null, null, { data, _ -> action(data) })
+    inline fun onPictureTaken(crossinline action: (encodedImage: ByteArray) -> Unit) {
+        cameraInstance?.takePicture(null, null, { data, _ ->
+            action(data.compress())
+        })
     }
 
     private inline fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
@@ -68,5 +71,5 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
         Log.d(TAG, e.message)
     }
 
-    private fun log(any: Any): Int = Log.d(TAG, any.toString())
+    fun log(any: Any): Int = Log.d(TAG, any.toString())
 }
