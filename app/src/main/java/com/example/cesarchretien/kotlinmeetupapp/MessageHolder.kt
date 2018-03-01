@@ -19,10 +19,12 @@ abstract class MessageHolder(override val containerView: View?) : RecyclerView.V
     abstract infix fun populateWith(message: Message)
 
     fun setOwner(messageCardView: CardView, userNameView: TextView, message: Message) {
-        if (FirebaseAuth.getInstance().currentUser?.displayName == message.user) {
-            with(messageCardView) {
-                setLayoutGravity(Gravity.END)
-                setCardBackgroundColorByRes(R.color.colorActiveUser)
+
+        with(messageCardView) {
+            val isOwner = FirebaseAuth.getInstance().currentUser?.displayName == message.user
+            isOwner.let {
+                setLayoutGravity(if (it) Gravity.END else Gravity.START)
+                setCardBackgroundColorByRes(if (it) R.color.colorActiveUser else R.color.cardview_light_background)
             }
         }
 

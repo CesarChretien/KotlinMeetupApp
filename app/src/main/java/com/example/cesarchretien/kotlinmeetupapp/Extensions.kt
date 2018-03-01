@@ -1,15 +1,19 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.Camera
 import android.support.annotation.ColorRes
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -51,4 +55,42 @@ fun ByteArray.compress(): ByteArray {
         smallBmp.compress(Bitmap.CompressFormat.JPEG, 100, it)
         it.toByteArray()
     }
+}
+
+typealias ScreenDimensions = Pair<Int, Int>
+
+fun Activity.screenDimensions(): ScreenDimensions = DisplayMetrics().let {
+    windowManager.defaultDisplay.getMetrics(it)
+    it.widthPixels to it.heightPixels
+}
+
+fun <T : Any> T.log(any: Any): Int = Log.d(this::class.java.simpleName, any.toString())
+
+operator fun Double.times(layoutParams: FrameLayout.LayoutParams): FrameLayout.LayoutParams = layoutParams.apply {
+    width = (this@times * width).toInt()
+    height = (this@times * height).toInt()
+}
+
+fun Camera.setDisplayOrientation(activity: Activity, cameraId: Int) {
+    val info = Camera.CameraInfo()
+    Camera.getCameraInfo(cameraId, info)
+
+    val rotation = activity.windowManager.defaultDisplay.rotation
+    val degrees = when (rotation) {
+        Surface.ROTATION_0 -> 0
+        Surface.ROTATION_90 -> 90
+        Surface.ROTATION_180 -> 180
+        Surface.ROTATION_270 -> 270
+        else -> throw Exception("Unknown rotation")
+    }
+
+    val result = if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+        val uncompensatedResult = (info.orientation + degrees) % 360;
+        (360 - uncompensatedResult) % 360 // compensate the mirror
+    }
+    else {  // back-facing
+        (info.orientation - degrees + 360) % 360
+    }
+
+    setDisplayOrientation(result)
 }

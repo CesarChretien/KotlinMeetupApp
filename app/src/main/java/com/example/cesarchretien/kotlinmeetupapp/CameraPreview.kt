@@ -1,5 +1,6 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Camera
 import android.util.AttributeSet
@@ -13,27 +14,17 @@ import android.view.SurfaceView
  */
 private const val TAG = "CameraViewTag"
 
-class CameraView(context: Context, attributeSet: AttributeSet? = null) : SurfaceView(context, attributeSet), SurfaceHolder.Callback {
-
-    val cameraInstance: Camera? by lazy {
-        try {
-            Log.d(TAG, "Camera creation!")
-            Camera.open()
-        }
-        catch (e: Exception) {
-            Log.d(TAG, "Failed to create camera instance...")
-            null
-        }
-    }
+@SuppressLint("ViewConstructor")
+class CameraPreview(context: Context, attributeSet: AttributeSet? = null, val cameraInstance: Camera? = null) : SurfaceView(context, attributeSet), SurfaceHolder.Callback {
 
     init {
         holder?.apply {
-            addCallback(this@CameraView)
+            addCallback(this@CameraPreview)
         }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        Log.d(TAG, "Surface has changed.")
+        Log.d(TAG, "Surface has changed, (w, h) = ($width, $height)")
         with(holder) {
             this?.surface.apply {
                 cameraInstance?.applyExceptionSafe {
@@ -70,6 +61,4 @@ class CameraView(context: Context, attributeSet: AttributeSet? = null) : Surface
     catch (e: Exception) {
         Log.d(TAG, e.message)
     }
-
-    fun log(any: Any): Int = Log.d(TAG, any.toString())
 }
