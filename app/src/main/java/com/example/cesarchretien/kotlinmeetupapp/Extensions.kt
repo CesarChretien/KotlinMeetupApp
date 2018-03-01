@@ -3,7 +3,9 @@ package com.example.cesarchretien.kotlinmeetupapp
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.hardware.Camera
+import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
@@ -46,20 +48,39 @@ fun ByteArray.encode(): String = Base64.encodeToString(this, Base64.DEFAULT)
 
 fun String.decode(): ByteArray = Base64.decode(this, Base64.DEFAULT)
 
-fun ByteArray.compress(): ByteArray {
-    val smallBmp = BitmapFactory.decodeByteArray(this, 0, this.size).let {
-        Bitmap.createScaledBitmap(it, it.width / 2, it.height / 2, true)
+fun Bitmap.rotate(degrees: Float, filter: Boolean = false): Bitmap {
+    val rotationMatrix = Matrix().apply {
+        setRotate(degrees)
+    }
+
+    return Bitmap.createBitmap(this, 0, 0, width, height, rotationMatrix, filter)
+}
+
+fun Activity.rotateAndCompress(byteArray: ByteArray): ByteArray {
+    val smallBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size).let {
+
+        val degrees = getCorrectOrientation(this, 0).toFloat()
+        val rotatedBitmap = if (degrees in 1..359) it.rotate(degrees) else it
+        val (screenWidth, _) = getScreenDimensions()
+        val ratio = screenWidth.toDouble() / (2 * rotatedBitmap.width)
+
+        rotatedBitmap
+                .run {
+                    val scaledWidth = (width * ratio).toInt()
+                    val scaledHeight = (height * ratio).toInt()
+                    Bitmap.createScaledBitmap(this, scaledWidth, scaledHeight, true)
+                }
     }
 
     return ByteArrayOutputStream().use {
-        smallBmp.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        smallBitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
         it.toByteArray()
     }
 }
 
 typealias ScreenDimensions = Pair<Int, Int>
 
-fun Activity.screenDimensions(): ScreenDimensions = DisplayMetrics().let {
+fun Activity.getScreenDimensions(): ScreenDimensions = DisplayMetrics().let {
     windowManager.defaultDisplay.getMetrics(it)
     it.widthPixels to it.heightPixels
 }
@@ -71,7 +92,7 @@ operator fun Double.times(layoutParams: FrameLayout.LayoutParams): FrameLayout.L
     height = (this@times * height).toInt()
 }
 
-fun Camera.setDisplayOrientation(activity: Activity, cameraId: Int) {
+fun getCorrectOrientation(activity: Activity, cameraId: Int): Int {
     val info = Camera.CameraInfo()
     Camera.getCameraInfo(cameraId, info)
 
@@ -84,13 +105,19 @@ fun Camera.setDisplayOrientation(activity: Activity, cameraId: Int) {
         else -> throw Exception("Unknown rotation")
     }
 
-    val result = if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-        val uncompensatedResult = (info.orientation + degrees) % 360;
-        (360 - uncompensatedResult) % 360 // compensate the mirror
+    return when {
+        isEmulator() -> 0
+        info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT -> {
+            val uncompensatedResult = (info.orientation + degrees) % 360
+            (360 - uncompensatedResult) % 360 // compensate the mirror
+        }
+        else -> (info.orientation - degrees + 360) % 360
     }
-    else {  // back-facing
-        (info.orientation - degrees + 360) % 360
-    }
-
-    setDisplayOrientation(result)
 }
+
+//Good chance is you're running this in an emulator.
+fun isEmulator() = Build.FINGERPRINT.startsWith("generic")
+        || Build.FINGERPRINT.startsWith("unknown")
+        || Build.MODEL.contains("google_sdk")
+        || Build.MODEL.contains("Emulator")
+        || Build.MODEL.contains("Android SDK built for x86")

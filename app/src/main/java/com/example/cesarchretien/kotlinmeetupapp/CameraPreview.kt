@@ -51,7 +51,7 @@ class CameraPreview(context: Context, attributeSet: AttributeSet? = null, val ca
 
     inline fun onPictureTaken(crossinline action: (encodedImage: ByteArray) -> Unit) {
         cameraInstance?.takePicture(null, null, { data, _ ->
-            action(data.compress())
+            action(data)
         })
     }
 

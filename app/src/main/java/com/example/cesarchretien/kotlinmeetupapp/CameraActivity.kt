@@ -31,14 +31,15 @@ class CameraActivity : AppCompatActivity() {
             null
         }
 
-        cameraInstance?.setDisplayOrientation(this, 0)
+        val correctOrientation = getCorrectOrientation(this@CameraActivity, 0)
+        cameraInstance?.setDisplayOrientation(correctOrientation)
 
         val preview = buildCameraPreview(cameraInstance)
 
         cameraButton.setOnClickListener {
             preview.onPictureTaken {
                 val resultIntent = Intent().apply {
-                    putExtra("picture", it)
+                    putExtra("picture", rotateAndCompress(it))
                 }
 
                 setResult(Activity.RESULT_OK, resultIntent)
@@ -49,10 +50,11 @@ class CameraActivity : AppCompatActivity() {
         cameraContainer.addView(preview)
     }
 
+
     private fun buildCameraPreview(cameraInstance: Camera?): CameraPreview {
         return CameraPreview(this, cameraInstance = cameraInstance).apply {
             cameraInstance?.parameters?.previewSize?.let {
-                val (screenWidth, screenHeight) = this@CameraActivity.screenDimensions()
+                val (screenWidth, screenHeight) = this@CameraActivity.getScreenDimensions()
 
                 //The camera width/height from the preview does not account for orientation, so we're fixing that here.
                 val (actualCameraWidth, actualCameraHeight) = when (resources.configuration.orientation) {

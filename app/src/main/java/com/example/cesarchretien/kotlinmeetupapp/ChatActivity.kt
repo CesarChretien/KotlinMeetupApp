@@ -11,6 +11,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -62,6 +64,22 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val editTextIsEmpty = s == null || s.isEmpty()
+                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //do nothing
+            }
+        })
+
         fab.setOnClickListener {
             val messageText = editText.text.toString()
 
