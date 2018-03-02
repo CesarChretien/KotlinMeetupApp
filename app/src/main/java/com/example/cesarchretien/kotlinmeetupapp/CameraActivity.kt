@@ -57,9 +57,10 @@ class CameraActivity : AppCompatActivity() {
                 val (screenWidth, screenHeight) = this@CameraActivity.getScreenDimensions()
 
                 //The camera width/height from the preview does not account for orientation, so we're fixing that here.
-                val (actualCameraWidth, actualCameraHeight) = when (resources.configuration.orientation) {
-                    ORIENTATION_LANDSCAPE -> it.width to it.height
-                    ORIENTATION_PORTRAIT -> it.height to it.width
+                val orientation = resources.configuration.orientation
+                val (actualCameraWidth, actualCameraHeight) = when {
+                    isEmulator() || orientation == ORIENTATION_LANDSCAPE -> it.width to it.height
+                    orientation == ORIENTATION_PORTRAIT -> it.height to it.width
                     else -> throw Exception("Unknown orientation")
                 }
 

@@ -93,6 +93,10 @@ operator fun Double.times(layoutParams: FrameLayout.LayoutParams): FrameLayout.L
 }
 
 fun getCorrectOrientation(activity: Activity, cameraId: Int): Int {
+    if (isEmulator()) {
+        return 0
+    }
+
     val info = Camera.CameraInfo()
     Camera.getCameraInfo(cameraId, info)
 
@@ -106,7 +110,6 @@ fun getCorrectOrientation(activity: Activity, cameraId: Int): Int {
     }
 
     return when {
-        isEmulator() -> 0
         info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT -> {
             val uncompensatedResult = (info.orientation + degrees) % 360
             (360 - uncompensatedResult) % 360 // compensate the mirror
