@@ -25,6 +25,9 @@ import java.io.ByteArrayOutputStream
 /**
  * Created by cesarchretien on 21/02/2018.
  */
+
+private const val FIXED_PHOTO_WIDTH_IN_PX = 540f
+
 fun CardView.setCardBackgroundColorByRes(@ColorRes colorRes: Int) = this.setCardBackgroundColor(ContextCompat.getColor(context, colorRes))
 
 fun View.brieflyShowSnackbar(message: String) = Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
@@ -61,15 +64,13 @@ fun Activity.rotateAndCompress(byteArray: ByteArray): ByteArray {
 
         val degrees = getCorrectOrientation(this, 0).toFloat()
         val rotatedBitmap = if (degrees in 1..359) it.rotate(degrees) else it
-        val (screenWidth, _) = getScreenDimensions()
-        val ratio = screenWidth.toDouble() / (2 * rotatedBitmap.width)
 
-        rotatedBitmap
-                .run {
-                    val scaledWidth = (width * ratio).toInt()
-                    val scaledHeight = (height * ratio).toInt()
-                    Bitmap.createScaledBitmap(this, scaledWidth, scaledHeight, true)
-                }
+        rotatedBitmap.run {
+            val ratio = FIXED_PHOTO_WIDTH_IN_PX / width
+            val scaledWidth = FIXED_PHOTO_WIDTH_IN_PX.toInt()
+            val scaledHeight = (height * ratio).toInt()
+            Bitmap.createScaledBitmap(this, scaledWidth, scaledHeight, true)
+        }
     }
 
     return ByteArrayOutputStream().use {
