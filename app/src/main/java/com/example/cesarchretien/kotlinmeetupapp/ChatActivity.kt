@@ -1,18 +1,10 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
-import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.MenuRes
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
@@ -22,9 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
-const val CAMERA_PERMISSION_REQUEST_CODE = 300
 const val SIGN_IN_REQUEST_CODE = 200
-const val CAMERA_REQUEST_CODE = 100
 const val MAXIMUM_MESSAGES = 50
 const val DATABASE_NAME = "chats"
 
@@ -65,81 +55,24 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val editTextIsEmpty = s == null || s.isEmpty()
-                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //do nothing
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //do nothing
-            }
-        })
-
+        fab.setImageResource(R.drawable.ic_send_white_24dp)
         fab.setOnClickListener {
             val messageText = editText.text.toString()
 
             if (messageText.isNotEmpty()) {
-                sendMessage { user -> Message(messageText, user) }
+                sendMessage(messageText, MessageType.TEXT)
                 editText.clear()
             }
-            else {
-                startCamera()
-            }
         }
-    }
-
-    private fun startCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //You have camera permission, so time to take a picture!
-            startCameraForResult()
-        }
-        else {
-            //No camera permission, so you need to ask for it first.
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                parentView.brieflyShowSnackbar("Explain it to me please.")
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCameraForResult()
-            }
-        }
-    }
-
-    private fun startCameraForResult() {
-        startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
     }
 
     private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            displayChatMessages()
-        }
-        else if (requestCode == CAMERA_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                data?.getByteArrayExtra("picture")?.also {
-                    sendMessage { user -> Message(it.encode(), user = user, type = MessageType.IMAGE) }
-                }
-            }
-        }
-    }
-
-    private fun sendMessage(action: (user: String) -> Message) = query.ref.push().setValue(action(user()?.displayName
-            ?: "Unknown"))
+    private fun sendMessage(messageText: String, messageType: MessageType) = query
+            .ref
+            .push()
+            .setValue(Message(user = user()?.displayName
+                    ?: "Unknown", text = messageText, type = messageType))
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 

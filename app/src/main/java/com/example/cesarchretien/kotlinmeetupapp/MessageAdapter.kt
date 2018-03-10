@@ -7,7 +7,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 /**
  * Created by cesarchretien on 14/02/2018.
  */
-private const val TAG = "Adapter"
+private const val TAG = "MessageAdapter"
 private const val TEXT = 1
 private const val IMAGE = 2
 

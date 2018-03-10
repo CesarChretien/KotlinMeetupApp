@@ -1,6 +1,8 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
 import android.graphics.BitmapFactory
+import android.support.annotation.ColorRes
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
@@ -30,6 +32,8 @@ abstract class MessageHolder(override val containerView: View?) : RecyclerView.V
 
         userNameView.text = message.user
     }
+
+    private fun CardView.setCardBackgroundColorByRes(@ColorRes colorRes: Int) = this.setCardBackgroundColor(ContextCompat.getColor(context, colorRes))
 }
 
 class ChatMessageHolder(override val containerView: View?) : MessageHolder(containerView), LayoutContainer {

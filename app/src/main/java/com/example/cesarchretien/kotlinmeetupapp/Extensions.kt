@@ -6,11 +6,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.hardware.Camera
 import android.os.Build
-import android.support.annotation.ColorRes
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.CardView
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
@@ -27,8 +24,6 @@ import java.io.ByteArrayOutputStream
  */
 
 private const val FIXED_PHOTO_WIDTH_IN_PX = 540f
-
-fun CardView.setCardBackgroundColorByRes(@ColorRes colorRes: Int) = this.setCardBackgroundColor(ContextCompat.getColor(context, colorRes))
 
 fun View.brieflyShowSnackbar(message: String) = Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
 
