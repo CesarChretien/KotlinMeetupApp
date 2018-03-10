@@ -68,7 +68,7 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val editTextIsEmpty = s == null || s.isEmpty()
-                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
+                fab.setImageResource(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -99,13 +99,8 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             startCameraForResult()
         }
         else {
-            //No camera permission, so you need to ask for it first.
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                parentView.brieflyShowSnackbar("Explain it to me please.")
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-            }
+            //No camera permission, so you need to ask for it.
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         }
     }
 
@@ -113,6 +108,9 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCameraForResult()
+            }
+            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                parentView.brieflyShowSnackbar("You really need to give permission for camera usage for this...")
             }
         }
     }
