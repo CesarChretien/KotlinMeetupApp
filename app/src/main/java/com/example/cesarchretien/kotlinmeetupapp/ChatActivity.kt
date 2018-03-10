@@ -47,6 +47,14 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.log_out) {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) finish()
+                    }
+        }
+
         return true
     }
 
