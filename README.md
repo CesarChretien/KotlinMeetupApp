@@ -10,6 +10,6 @@ After installing, choose **Check out project from Version Control** -> **Git** a
 
 Run the project and happy hacking!
 
-## In the future
+# Step 1
 
-This project will be a well-documented, easy-to-follow tutorial to build a chat app from scratch in Kotlin.
+This is step 1.
