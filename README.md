@@ -68,13 +68,13 @@ javaMethod(new SomeInterface() {
 ```
 Yikes, that looks like an ocean of boilerplate code. Luckily, Java 8 decided to enter the 21st century and made it possible to use it like this:
 ```java
-javaMethod(() -> { //specify behaviour of doSomething() here. });
+javaMethod(() -> { /* specify behaviour of doSomething() here. */ });
 ```
 Much better! This is possible because `SomeInterface` is a functional interface, which means it has *exactly* one abstract method. 
 
 Now how would one go about achieving this in Kotlin? Fairly simple actually. The behaviour of functional interfaces is baked into the language as functions. Functions can be stored in values as usual:
 ```kotlin
-val f: () -> Unit = { //do something that returns nothing here. }
+val f: () -> Unit = { /* do something that returns nothing here. */ }
 ```
 Let's break this down: The signature `() -> Unit` means that `f` is a function which takes no input parameters (denoted by `()` and being on the left side of `->`) and doesn't return anything (denoted by `Unit` being on the right side of `->`.
 Now let's try something fancier:
@@ -93,11 +93,11 @@ fun kotlinMethod(doSomething: () -> Unit) {
 ```
 ...and that's it! No need to define a seperate interface first. To call this method it will look something like this:
 ```kotlin
-kotlinMethod({ //do something that returns nothing here. })
+kotlinMethod({ /* do something that returns nothing here. */ })
 ```
 A small note: In Kotlin if the final input parameter of a method is a function, you can omit the parenthesis. Thus this code block is equivalent to the previous one:
 ```kotlin
-kotlinMethod { //do something that returns nothing here. }
+kotlinMethod { /* do something that returns nothing here. */ }
 ```
 
 So what's the grand idea behind these explanations? Java and Kotlin are 100% interoperable, and in this case you can treat a java method with a functional interface as an input parameter as if it's a function when you call it in Kotlin.
