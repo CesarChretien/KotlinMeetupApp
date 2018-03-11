@@ -22,4 +22,12 @@ In Android Studio, press the green triangle located somewhere on top or press **
 
 ## Run the app on your physical device
 
-[Read how to enable developer options on your phone first.](https://developer.android.com/studio/debug/dev-options.html) 
+[Read how to enable developer options on your phone first.](https://developer.android.com/studio/debug/dev-options.html) Afterwards you should be prompted by your phone to allow access by your computer. If everything has gone well you can now select your phone from the **Select Deployment Target** prompt and the app should start building and subsequently be installed on your phone.
+
+## Run the app on an emulator
+
+If you already have an emulator set up, it should appear under the "Available virtual devices". If not, press the "Create New Virtual Device" button in the lower left of your prompt. Select from the tab "Phone" a device with a "play" icon present in the column "Play Store" (your options probably are a Nexus 5 or Nexus 5X) and click "Next" in the bottom right. Secondly you have to pick a System Image of API level **21 or higher**. Under the "recommended" tab API level 24 and up is listed so picking either of them should be fine. At the time of writing the most recent stable version is API level 27, also known as 8.1 Oreo.
+
+## Next step
+
+On successfully building, installing and launching the app, you should see a screen with the text "Good job! Time to go to step 2!" in the centre. Which means it's time to do exactly that. :)
