@@ -10,6 +10,6 @@ After installing, choose **Check out project from Version Control** -> **Git** a
 
 Run the project and happy hacking!
 
-## In the future
+## This is the master branch
 
-This project will be a well-documented, easy-to-follow tutorial to build a chat app from scratch in Kotlin.
+This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, check out this branch and run it. :)
