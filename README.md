@@ -1,15 +1,12 @@
-## Intro
+# Step 2
 
-This app has been made to introduce people to Kotlin and make something fancy in the process.
+Welcome to the second step of this tutorial, time to dive into actual code this time (welcome to Android development, where getting a basic app to run is half the battle)! Since we're building a chat app, authentication is crucial, which we're going to tackle during this step. 
 
-## Before we start
+## Goal of step 2
 
-To be able to edit and run this app, you need [Android Studio 3.0](https://developer.android.com/studio/index.html) or higher, since that version comes with Kotlin included out of box.
+On completion of step 2, when you run the app, you should see a screen with a single line of text in the centre which reads "Currently logged in as: `<your name>`", where `<your name>` is the display name you chose upon anonymous sign in, or the name that's registered in your Google account (if you use that one to sign in).
 
-After installing, choose **Check out project from Version Control** -> **Git** and put as **Git Repository URL**: https://github.com/CesarChretien/KotlinMeetupApp
+## Firebase
 
-Run the project and happy hacking!
-
-## In the future
-
-This project will be a well-documented, easy-to-follow tutorial to build a chat app from scratch in Kotlin.
+[Firebase](https://firebase.google.com/) is a very helpful service provided by google to easily implement all sorts of functionality into your app. Analytics, monetizing, nowadays even crash reports, the list goes on. In case of our app we're interested in the Authentication and Database part.
+[For this we're going to use the class AuthUI](https://firebase.google.com/docs/auth/android/firebaseui#signin).
