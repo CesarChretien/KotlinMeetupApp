@@ -1,13 +1,9 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.MenuRes
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -94,25 +90,18 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     }
 
     private fun startCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //You have camera permission, so time to take a picture!
-            startCameraForResult()
-        }
-        else {
-            //No camera permission, so you need to ask for it.
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-        }
+        TODO("""
+            Here, you want to start your camera, but since Android 6 and above, permissions are asked during run time,
+            not on install. So here you should check if a user has already granted use of the device's camera. If yes, start the camera.
+            If not, go into the request camera permission flow.
+            """)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCameraForResult()
-            }
-            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                parentView.brieflyShowSnackbar("You really need to give permission for camera usage for this...")
-            }
-        }
+        TODO("""
+            After exiting the camera permission flow, this method will be called with the result of that flow.
+            If the user has granted camera access, we should start the camera immediately.
+            """)
     }
 
     private fun startCameraForResult() {
