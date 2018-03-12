@@ -106,7 +106,7 @@ kotlinMethod { /* do something that returns nothing here. */ }
 
 So what's the grand idea behind these explanations? Java and Kotlin are 100% interoperable, and in this case you can treat a java method with a functional interface as an input parameter as if it's a function when you call it in Kotlin.
 
-## Kotlinx synthetics
+## Kotlin Android Extensions
 One of the huge benefits Kotlin has brought to Android is how to bind view elements from a `.xml` file into your Views and Activities. Suppose you have the following EditText (an element which allows for text input from a user) in your xml:
 ```xml
 <EditText
