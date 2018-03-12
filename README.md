@@ -9,7 +9,7 @@ You'll have completed this step if you're able to launch a new Activity, enter s
 * `CameraActivity.kt`
 
 ## Miscellaneous changes
-`ChatActivity.kt` has changed a bit since last time. `editText` now has a `TextWatcher` attached to it, 
+`ChatActivity.kt` has changed a bit since last time. `editText` now has a `TextWatcher` attached to it, which changes the icon from a send-arrow to a camera if it has no text in it (refer back to the previous step if you're not sure how instatiate an abstract entity). Because we value good UX, when the button has changed to a camera, if you press it instead of sending an empty text message, you'll start a new activity.
 
 ## Activities
 It seems a bit late now to specifically touch upon one of the key classes of Android, but if your app only has one activity they're not super interesting (other than of course they're your main class, provide an entry point for your app, handle [lifecycle states](https://developer.android.com/guide/components/activities/activity-lifecycle.html) and much more. It gets way more interesting once multiple activities are involved. In this case we want to [launch an Activity and get a result back from that it](https://developer.android.com/training/basics/intents/result.html#StartActivity).
