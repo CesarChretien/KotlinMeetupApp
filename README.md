@@ -22,5 +22,30 @@ For this step we want to send and retrieve messages. This section will give you 
 Since `query` already points to the correct section of our database, it's easiest to re-use that part for sending messages. From `query` you can get your `DatabaseReference` back, then specify that you want to **push** *-hint hint-* a **value** *-hint hint-* to your database. Optionally you can attach an `OnCompletionListener` on the method you use to set a value in which you can log a debug statement.
 
 ### Receiving messages
+As soon as someone sends a new message to the database you need to make sure this message displayed to all your other users. Since we're basically changing the content of our UI this means this should be handled by the adapter attached to your `RecyclerView`. A `FirebaseRecyclerAdapter` accepts a `FirebaseRecyclerOptions` as argument, which has been conveniently provided for you. :)
 
+## Kotlin Koolstuff
+Welcome to another installment of Kotlin Koolstuff! Again, some basics about Kotlin can be found here which might help you to implement the features described in this step.
+
+### Creating objects
+Instantiating an object in Kotlin is fairly simply. Creating an object an storing it in a `val` goes as follows:
+```kotlin
+val x = Thing()
+```
+Here, `x`'s type is inferred by the compiler as `Thing`, so when making use of `x` it will be recognized as such.
+Now let's assume you have a `Person` object with a name and an age. In Kotlin you'd declare something like that as:
+```kotlin
+data class Person(var name: String, var age: Int)
+```
+And that's it. Notice the `data` modifier in front of this class? This means that you get the `equals()`, `hashCode()`, `copy()`, `toString()`, setter and getter methods for free! Both variables are marked as `var`, which means they're mutable. If you mark a variable as `val`, it's immutable and after invoking the constructor you can't change it.
+Making sure an object is well-defined for FirebaseDatabase, it needs a **default constructor**, meaning that we can instantiate it without any parameters. How would you tackle this? The naive way would be to redefine a constructor that takes no input parameters for your class. But we can do better, in Kotlin we can make use of **default arguments** like so:
+```kotlin
+data class Person(var name: String = "Anonymous", var age: Int = -1)
+```
+Meaning `println(Person())` will print `Person(name=Anonymous, age=-1)`. But what if I want to remain "Anonymous" as a person, but I do want to supply a proper age? Well, Kotlin's got you covered with **named arguments**, this allows you to instantiate a Person as follows:
+```kotlin
+val p = Person(age = 42)
+println(p)
+```
+Which will print `Person(name=Anonymous, age=42)`.
 
