@@ -17,6 +17,10 @@ On completion of step 2, when you run the app, you should see a screen with a si
 
 [On the same page which explains signing in](https://firebase.google.com/docs/auth/android/firebaseui#signout), signing out is also explained. Because the app does absolutely nothing when signed out, we want to close the app after signing out is complete.
 
+## Relevant files for this step
+* `ChatActivity.kt`
+* `activity_main.xml`
+
 ## Kotlin Koolstuff
 
 Welcome to the first Kotlin Koolstuff section! Each step will have one of these sections which gives you some information about Kotlin itself which might help you to implement 
@@ -101,3 +105,27 @@ kotlinMethod { /* do something that returns nothing here. */ }
 ```
 
 So what's the grand idea behind these explanations? Java and Kotlin are 100% interoperable, and in this case you can treat a java method with a functional interface as an input parameter as if it's a function when you call it in Kotlin.
+
+## Kotlinx synthetics
+One of the huge benefits Kotlin has brought to Android is how to bind view elements from a `.xml` file into your Views and Activities. Suppose you have the following EditText (an element which allows for text input from a user) in your xml:
+```xml
+<EditText
+    android:id="@+id/some_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Enter some text here!" />
+```
+The oldest Java way to bind this in your code was as follows:
+```java
+final EditText someEditText = (EditText) findViewById(R.id.some_edit_text);
+```
+Luckily, nowadays `findViewById` accepts a generic type parameter so you don't have to explicitly cast every element anymore, and at some point the marvelous library called [ButterKnife](http://jakewharton.github.io/butterknife/) was introduced which meant you could bind your view elements to class variables like so:
+```java
+@BindView(R.id.some_edit_text)
+EditText someEditText;
+```
+Which cleaned up alot of unneccessary code. Though Kotlin introduced something even better, which are [Kotlin Android Extensions](https://kotlinlang.org/docs/tutorials/android-plugin.html). This allows us in Kotlin code to simply call
+```kotlin
+some_edit_text
+```
+As an `EditText` element on which you can perform the neccessary operations to achieve whatever functionality you had in mind. If you decide to use this in your project you might want to consider changing the naming convention of your ids from `lowercase_separated_by_underscores` to `lowerCamelCase`.
