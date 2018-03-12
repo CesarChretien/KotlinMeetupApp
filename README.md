@@ -23,7 +23,7 @@ On completion of step 2, when you run the app, you should see a screen with a si
 
 ## Kotlin Koolstuff
 
-Welcome to the first Kotlin Koolstuff section! Each step will have one of these sections which gives you some information about Kotlin itself which might help you to implement 
+Welcome to the first Kotlin Koolstuff section! Each step will have one of these sections which gives you some information about Kotlin itself which might help you to implement functionality desired in this step in a clean and Kotlin-y way.
 
 ### Methods and nullability 
 ```kotlin
