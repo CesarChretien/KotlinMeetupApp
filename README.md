@@ -2,24 +2,24 @@
 
 Welcome to the second step of this tutorial, time to dive into actual code this time (welcome to Android development, where getting a basic app to run is half the battle)! Since we're building a chat app, authentication is crucial, which we're going to tackle during this step. 
 
-## Goal of step 2
+### Goal of step 2
 
 On completion of step 2, when you run the app, you should see a screen with a single line of text in the centre which reads "Currently logged in as: `<your name>`", where `<your name>` is the display name you chose upon anonymous sign in, or the name that's registered in your Google account (if you use that one to sign in).
+
+### Relevant files for this step
+* `ChatActivity.kt`
+* `activity_main.xml`
 
 ## Firebase
 
 [Firebase](https://firebase.google.com/) is a very helpful service provided by Google to easily implement all sorts of functionality into your app. Analytics, monetizing, nowadays even crash reports, the list goes on. In case of our app we're interested in the Authentication and Database part. Since this step is about Authentication we shall dive into that first.
 
-## Signing in
+### Signing in
 [For this we're going to use the class AuthUI](https://firebase.google.com/docs/auth/android/firebaseui#signin). Usually a sign-in flow requires alot of thought, for example "When a user launches the app, I should check if he/she is signed in our not" and "When a user tries to create an account, we should check if an account with that name is already registered". Long story short: If we tried to implement a sign-in flow from scratch ourselves, we'd be out of time before we're even halfway done.
 
-## Signing out
+### Signing out
 
 [On the same page which explains signing in](https://firebase.google.com/docs/auth/android/firebaseui#signout), signing out is also explained. Because the app does absolutely nothing when signed out, we want to close the app after signing out is complete.
-
-## Relevant files for this step
-* `ChatActivity.kt`
-* `activity_main.xml`
 
 ## Kotlin Koolstuff
 
