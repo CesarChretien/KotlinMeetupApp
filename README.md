@@ -1,5 +1,5 @@
 ## Step 4
-Welcome to the fourth step in this tutorial! In this step we're shifting our focus back to something typically Android, which are intents, starting a new Activity and getting some information back from that Activity when it's finished.
+Welcome to the fourth step in this tutorial! From here on out these README.md files are going to be significantly smaller due to having explained quite a bit of basic Kotlin properties already. In this step we're shifting our focus back to something typically Android, which are intents, starting a new Activity and getting some information back from that Activity when it's finished.
 
 ### Goal of step 4
 You'll have completed this step if you're able to launch a new Activity, enter some text and successfully send it back to your previous activity.
