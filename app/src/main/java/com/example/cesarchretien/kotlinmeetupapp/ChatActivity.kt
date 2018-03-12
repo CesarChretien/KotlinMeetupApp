@@ -1,6 +1,5 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.MenuRes
@@ -93,15 +92,18 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     }
 
     private fun startCameraForResult() {
-        startActivityForResult(Intent(this, CameraActivity::class.java), CAMERA_REQUEST_CODE)
+        TODO("""
+            Alright, the name might be confusing, but the activity you're going to launch is going to be your camera preview in the future.
+            For now though, it'll show you a simple EditText and a button. But anyways, here is where you should launch a new Activity for a result back.
+            """)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
-            val message = data?.getStringExtra("message") ?: "nothing"
-            parentView.brieflyShowSnackbar("Your message is: $message")
-        }
+        TODO("""
+            As soon as your second activity closes, this method will get called. Make sure you understand what
+            requestCode, resultCode and data entail. From here you should be able to get the message you entered in your second activity.
+            """)
     }
 
     private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser

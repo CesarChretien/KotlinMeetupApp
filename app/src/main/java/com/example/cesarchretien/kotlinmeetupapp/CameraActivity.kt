@@ -1,7 +1,5 @@
 package com.example.cesarchretien.kotlinmeetupapp
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_camera.*
@@ -16,11 +14,10 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         sendButton.setOnClickListener {
-            setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra("message", messageBox.text.toString())
-            })
-
-            finish()
+            TODO("""
+                When we press the send button, we should set the result of this activity a whatever is in the messageBox.
+                Remember to specify your tag/key for the extra information you're going to send back!
+                """)
         }
     }
 }
