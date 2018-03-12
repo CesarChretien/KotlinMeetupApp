@@ -10,7 +10,7 @@ So now what if you're stuck using an old API? That's where Kotlin really shines.
 * `CameraPreview.kt`
 
 ### Goal of the final step
-You'll have completed this step if you're now finally able to send images to the chat application as well.
+You'll have completed this step if you're now finally able to send images to the chat application as well. Take some photo's!
 
 ## Kotlin Koolstuff
 Welcome to the final installment of Kotlin Koolstuff. As mentioned before, one of the nicest things about Kotlin is being able to basically molding an old API to your own liking by extending it with your own methods. Take [creating a camera preview](https://developer.android.com/guide/topics/media/camera.html#camera-preview) for example. Notice how often a `try-catch` is being used? Wouldn't it be nice if we can define a function on `Camera` which allows you to execute any method from `Camera` and when it throws an exception it will be caught and logged? In Kotlin you can achieve this by applying the following two points:
