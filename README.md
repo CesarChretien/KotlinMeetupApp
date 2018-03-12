@@ -49,3 +49,66 @@ println(p)
 ```
 Which will print `Person(name=Anonymous, age=42)`.
 
+### Using setters and getters between Java and Kotlin
+Suppose thing looks as follows in Java:
+```java
+public class Thing {  
+  private String value;
+  
+  public String getValue() {
+    return value;
+  }
+  
+  public void setValue(final String value) {
+    this.value = value;
+  }
+}
+```
+Properly formatted POJOs like this can be accessed in Kotlin as follows:
+```kotlin
+val t = Thing()
+println(t.value) //uses the getter. prints whatever value has.
+t.value = "new value" //uses the setter. sets value to whatever is on the right of =.
+```
+
+### Anonymous classes
+We've already seen the case where in Java you have a functional interface and you can treat it as a function. But what if we're dealing with an abstract class or interface which has more than one abstract method? In that case we really have to create an anonymous class defining those behaviours. Suppose we have the following:
+```java
+public interface TwoMethodInterface {
+  void method1();
+  
+  void method2();
+}
+```
+I will forego the Java implementation, but it's basically the pre-Java 8 functional interface implementation but with multiple methods. Suppose you have a method `niceMethod(@NonNull final TwoMethodInterface twoMethodInterface)`. In Kotlin you can use it as:
+```kotlin
+niceMethod(object : TwoMethodInterface() {
+  override fun method1() = /* do something here. */
+  
+  override fun method2() = /* do something else here. */
+})
+```
+Pretty straightforward. Three small notes here, the first being that you instantiate abstract entities with `object : `, second is that `override` is a proper keyword in Kotlin and last but not least: In this example we're overriding two methods, but it's also possible to override just one method as long as all methods are properly defined in a superclass.
+
+### Advanced function definitions
+Ever been in the situation where you had to do this?:
+```java
+SomeObject someObject = new SomeObject();
+someObject.doThis();
+someObject.doThat();
+//etc..
+```
+With Kotlin we can clean this up a little with the `apply` function which is contained in the [Kotlin Standard Library](https://kotlinlang.org/api/latest/jvm/stdlib/index.html) and is roughly defined as:
+```kotlin
+inline fun <T> T.apply(block: T.() -> Unit): T {
+  block()
+  return this
+}
+```
+Looks simple enough, but secretly *alot* is happening here:
+* `inline` is there because this method accepts a function as input-parameter, which causes `block` not to be translated to an anonymous inner class, which potentially can cause memory leaks and performance overhead.
+* `<T>` after `fun` denotes a generic parameter.
+* `T.apply` means this is an **extension function** of `T`. `T` here can even be a normally unmodifiable class (think `String` for example)
+* `block: T.() -> Unit` means that block is a function with as **receiver type** `T`. This is a fancy way of saying `block` is treated as a function which belongs to `T`.
+These will take a bit to wrap your head around, but are a very powerful feature of Kotlin.
+
