@@ -32,6 +32,39 @@ private const val TAG = "ChatActivity"
 
 class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val editTextIsEmpty = s == null || s.isEmpty()
+                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //do nothing
+            }
+        })
+
+        fab.setOnClickListener {
+            val messageText = editText.text.toString()
+
+            if (messageText.isNotEmpty()) {
+                sendMessage(Message(messageText, userName()))
+                editText.clear()
+            }
+            else {
+                startCamera()
+            }
+        }
+    }
+
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
         if (firebaseAuth.currentUser != null) {
             displayChatMessages()
@@ -60,52 +93,14 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             .child(DATABASE_NAME)
             .limitToLast(MAXIMUM_MESSAGES)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val editTextIsEmpty = s == null || s.isEmpty()
-                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //do nothing
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //do nothing
-            }
-        })
-
-        fab.setOnClickListener {
-            val messageText = editText.text.toString()
-
-            if (messageText.isNotEmpty()) {
-                sendMessage { user -> Message(messageText, user) }
-                editText.clear()
-            }
-            else {
-                startCamera()
-            }
-        }
-    }
-
     private fun startCamera() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             //You have camera permission, so time to take a picture!
             startCameraForResult()
         }
-        else {
+        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             //No camera permission, so you need to ask for it first.
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                parentView.brieflyShowSnackbar("Explain it to me please.")
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-            }
+            parentView.brieflyShowSnackbar("You really need to give permission for camera usage...")
         }
     }
 
@@ -123,23 +118,25 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    private fun userName() = user()?.displayName ?: "Unknown"
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == SIGN_IN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             displayChatMessages()
         }
-        else if (requestCode == CAMERA_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                data?.getByteArrayExtra("picture")?.also {
-                    sendMessage { user -> Message(it.encode(), user = user, type = MessageType.IMAGE) }
-                }
+        else if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.getByteArrayExtra("picture")?.also {
+                sendMessage(Message(it.encode(), user = userName(), type = MessageType.IMAGE))
             }
         }
     }
 
-    private fun sendMessage(action: (user: String) -> Message) = query.ref.push().setValue(action(user()?.displayName
-            ?: "Unknown"))
+    private fun sendMessage(message: Message) = query
+            .ref
+            .push()
+            .setValue(message)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 
