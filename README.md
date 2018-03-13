@@ -18,7 +18,7 @@ Sadly, nothing fancy is going to happen here. This branch is the bare-bones proj
 
 ## Getting to run the app.
 
-In Android Studio, press the green triangle located somewhere on top or press **CTRL** + **R**. You'll be prompted with a **Select Deployment Target** window where you can select on which device you want to run your app. You can choose to either run it on a physical device or a virtual device (also called an emulator). Go to "Run the app on your physical device" if you have an Android phone you can connect to your computer *and* you want to run the app on that phone, otherwise go to "Run the app on an emulator".
+In Android Studio, press the green triangle located somewhere on top or press <kbd>⌃</kbd> + <kbd>R</kbd> for Mac or <kbd>Shift</kbd> + <kbd>F10</kbd> for Windows. You'll be prompted with a **Select Deployment Target** window where you can select on which device you want to run your app. You can choose to either run it on a physical device or a virtual device (also called an emulator). Go to "Run the app on your physical device" if you have an Android phone you can connect to your computer *and* you want to run the app on that phone, otherwise go to "Run the app on an emulator".
 
 ## Run the app on your physical device
 
@@ -26,7 +26,7 @@ In Android Studio, press the green triangle located somewhere on top or press **
 
 ## Run the app on an emulator
 
-If you already have an emulator set up, it should appear under the "Available virtual devices". If not, press the "Create New Virtual Device" button in the lower left of your prompt. Select from the tab "Phone" a device with a "play" icon present in the column "Play Store" (your options probably are a Nexus 5 or Nexus 5X) and click "Next" in the bottom right. Secondly you have to pick a System Image of API level **21 or higher**. Under the "recommended" tab API level 24 and up is listed so picking either of them should be fine. At the time of writing the most recent stable version is API level 27, also known as 8.1 Oreo.
+If you already have an emulator set up, it should appear under the "Available virtual devices" when you try to run your app. If not, press the "Create New Virtual Device" button in the lower left of your prompt. Select from the tab "Phone" a device with a "play" icon present in the column "Play Store" (your options probably are a Nexus 5 or Nexus 5X) and click "Next" in the bottom right. Secondly you have to pick a System Image of API level **21 or higher**. Under the "recommended" tab API level 24 and up is listed so picking either of them should be fine. At the time of writing the most recent stable version is API level 27, also known as 8.1 Oreo.
 
 ## Next step
 
