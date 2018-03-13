@@ -27,11 +27,11 @@ class CameraPreview(context: Context, attributeSet: AttributeSet? = null, val ca
         Log.d(TAG, "Surface has changed, (w, h) = ($width, $height)")
         with(holder) {
             this?.surface.apply {
-                cameraInstance?.applyExceptionSafe {
-                    stopPreview()
-                    setPreviewDisplay(holder)
-                    startPreview()
-                }
+                //                cameraInstance?.applyExceptionSafe {
+//                    stopPreview()
+//                    setPreviewDisplay(holder)
+//                    startPreview()
+//                }
             }
         }
     }
@@ -43,10 +43,10 @@ class CameraPreview(context: Context, attributeSet: AttributeSet? = null, val ca
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         Log.d(TAG, "Surface is created.")
-        cameraInstance?.applyExceptionSafe {
-            setPreviewDisplay(holder)
-            startPreview()
-        }
+//        cameraInstance?.applyExceptionSafe {
+//            setPreviewDisplay(holder)
+//            startPreview()
+//        }
     }
 
     inline fun onPictureTaken(crossinline action: (encodedImage: ByteArray) -> Unit) {
@@ -55,10 +55,11 @@ class CameraPreview(context: Context, attributeSet: AttributeSet? = null, val ca
         })
     }
 
-    private inline fun Camera.applyExceptionSafe(action: Camera.() -> Unit) = try {
-        action()
-    }
-    catch (e: Exception) {
-        Log.d(TAG, e.message)
+    private inline fun Camera.applyExceptionSafe() {
+        TODO("""
+        With the knowledge you have gained, can you implement this function such
+        1. When you uncomment the code blocks in this file, it still compiles?
+        2. When a method throws an exception inside applyExceptionSafe, it gets caught and logged here?
+        """)
     }
 }

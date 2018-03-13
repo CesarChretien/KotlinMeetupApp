@@ -22,14 +22,10 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
         cameraView.brieflyShowSnackbar("You have ${if (baseContext.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) "a" else "no"} camera.")
 
-        val cameraInstance: Camera? = try {
-            log("Camera creation!")
-            Camera.open()
-        }
-        catch (e: Exception) {
-            log("Failed to create camera instance...")
-            null
-        }
+        val cameraInstance: Camera? = TODO("""
+            Here, we want our Camera instance to be open, but also
+            be assigned null if it fails for whatever reason.
+            """)
 
         val correctOrientation = getCorrectOrientation(this@CameraActivity, 0)
         cameraInstance?.setDisplayOrientation(correctOrientation)
