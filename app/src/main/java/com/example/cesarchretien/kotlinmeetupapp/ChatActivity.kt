@@ -32,6 +32,39 @@ private const val TAG = "ChatActivity"
 
 class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val editTextIsEmpty = s == null || s.isEmpty()
+                fab.setImageResource(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //do nothing
+            }
+        })
+
+        fab.setOnClickListener {
+            val messageText = editText.text.toString()
+
+            if (messageText.isNotEmpty()) {
+                sendMessage(Message(messageText, userName()))
+                editText.clear()
+            }
+            else {
+                startCamera()
+            }
+        }
+    }
+
     override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
         if (firebaseAuth.currentUser != null) {
             displayChatMessages()
@@ -59,39 +92,6 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             .reference
             .child(DATABASE_NAME)
             .limitToLast(MAXIMUM_MESSAGES)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val editTextIsEmpty = s == null || s.isEmpty()
-                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //do nothing
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //do nothing
-            }
-        })
-
-        fab.setOnClickListener {
-            val messageText = editText.text.toString()
-
-            if (messageText.isNotEmpty()) {
-                sendMessage { user -> Message(messageText, user) }
-                editText.clear()
-            }
-            else {
-                startCamera()
-            }
-        }
-    }
 
     private fun startCamera() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -123,6 +123,8 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     private fun user(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    private fun userName() = user()?.displayName ?: "Unknown"
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -132,14 +134,16 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         else if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 data?.getByteArrayExtra("picture")?.also {
-                    sendMessage { user -> Message(it.encode(), user = user, type = MessageType.IMAGE) }
+                    sendMessage(Message(it.encode(), user = userName(), type = MessageType.IMAGE))
                 }
             }
         }
     }
 
-    private fun sendMessage(action: (user: String) -> Message) = query.ref.push().setValue(action(user()?.displayName
-            ?: "Unknown"))
+    private fun sendMessage(message: Message) = query
+            .ref
+            .push()
+            .setValue(message)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean = menu.inflate(R.menu.main_menu)
 
