@@ -21,4 +21,4 @@ If you already have an emulator set up, it should appear under the "Available vi
 On successfully building, installing and launching the app, you should see a screen with the text "Good job! Time to go to step 2!" in the centre. Which means it's time to do exactly that. :)
 
 ## Navigation
-* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-2/README.md
