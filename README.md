@@ -119,3 +119,7 @@ val someObject = SomeObject().apply {
 }
 ```
 If you're interested, [this](https://proandroiddev.com/the-difference-between-kotlins-functions-let-apply-with-run-and-else-ca51a4c696b8) is a nice article about some of the functions contained in the Kotlin Standard library (and their subtle differences).
+
+## Navigation
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-2
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-4
