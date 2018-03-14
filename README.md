@@ -10,7 +10,8 @@ After installing, choose **Check out project from Version Control** -> **Git** a
 
 ## This is the master branch
 
-This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, just run the project by running it. :) Otherwise you can check out [step-1](https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1) by typing the following in your **Terminal**:
+This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, just run the project by running it. :) Otherwise you can check out [step-1](https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1) by typing the following in your Terminal:
+
 `git checkout step-1`
 
 ## Navigation
