@@ -37,5 +37,5 @@ val xInfo = x?.toString() ?: "x can't be represented as a String"
 `?:` is called the **elvis operator** (tilt your head 90 degrees to the left), which is saying "if somehow the statement to my left becomes null, assign what is to my right side to `xInfo`. This makes it so that `xInfo` is of non-null type `String`.
 
 ## Navigation
-* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-3
-* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-5
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-3/README.md
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-5/README.md
