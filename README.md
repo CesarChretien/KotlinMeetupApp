@@ -1,7 +1,10 @@
 # Step 3
 Welcome to the third step of this tutorial! In this step you're going to learn about `RecyclerView`s and how to couple them to a `FirebaseDatabase` so that you can display messages to your users. You're also going to learn how to push new (for now just text) messages to the database.
+To start this step, enter the following in your terminal:
 
-* Previous step: 
+`git checkout step-3 -f`
+
+
 ### Goal of step 3
 On completion of this step you can view messages other users have pushed to the database, and you can also send simple text messages yourself.
 
