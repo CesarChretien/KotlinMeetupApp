@@ -131,5 +131,5 @@ some_edit_text
 As an `EditText` element on which you can perform the neccessary operations to achieve whatever functionality you had in mind. If you decide to use this in your project you might want to consider changing the naming convention of your ids from `lowercase_separated_by_underscores` to `lowerCamelCase`.
 
 ## Navigation
-* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1
-* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-3
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-1/README.md
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-3/README.md
