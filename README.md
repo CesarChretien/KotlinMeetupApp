@@ -19,4 +19,4 @@ Welcome to the final installment of Kotlin Koolstuff. As mentioned before, one o
 That's it! If you want the whole shebang check out the `master` branch. I hope this was educational and you enjoyed this Android course. Comments and feedback are always welcome, and don't be shy to contact me if you have any questions. :)
 
 ## Navigation
-* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-5
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-5/README.md
