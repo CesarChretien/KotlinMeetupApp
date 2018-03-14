@@ -17,3 +17,6 @@ Welcome to the final installment of Kotlin Koolstuff. As mentioned before, one o
 1. Remember how an `if-else` block can be used in Kotlin? The same holds for a `try-catch` block.
 2. You method signature will be that of a higher-order function.
 That's it! If you want the whole shebang check out the `master` branch. I hope this was educational and you enjoyed this Android course. Comments and feedback are always welcome, and don't be shy to contact me if you have any questions. :)
+
+## Navigation
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-5
