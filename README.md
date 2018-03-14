@@ -45,5 +45,5 @@ fun whatsThis(val x: Int) {
 If you feel like your statement in the `if-else` blocks are small enough, you can even omit the curly brackets.
 
 ## Navigation
-* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-4
-* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-final
+* Previous step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-4/README.md
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/blob/step-final/README.md
