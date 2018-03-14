@@ -39,8 +39,8 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val editTextIsEmpty = s == null || s.isEmpty()
-                fab.setImageDrawable(resources.getDrawable(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp, theme))
+                val editTextIsEmpty = s?.isEmpty() ?: true
+                fab.setImageResource(if (editTextIsEmpty) R.drawable.ic_photo_camera_white_24dp else R.drawable.ic_send_white_24dp)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
