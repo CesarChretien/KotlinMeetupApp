@@ -13,3 +13,7 @@ Run the project and happy hacking!
 ## This is the master branch
 
 This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, check out this branch and run it. :) Otherwise you can check out [step-1](https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1).
+
+## Navigation
+
+* Start: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1
