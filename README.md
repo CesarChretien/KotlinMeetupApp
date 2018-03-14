@@ -1,6 +1,8 @@
 # Step 2
 
-Welcome to the second step of this tutorial, time to dive into actual code this time (welcome to Android development, where getting a basic app to run is half the battle)! Since we're building a chat app, authentication is crucial, which we're going to tackle during this step. 
+Welcome to the second step of this tutorial, time to dive into actual code this time (welcome to Android development, where getting a basic app to run is half the battle)! Since we're building a chat app, authentication is crucial, which we're going to tackle during this step. To start this step, enter the following in your terminal:
+
+git checkout step-2 -f
 
 ### Goal of step 2
 
