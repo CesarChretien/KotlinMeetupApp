@@ -1,15 +1,3 @@
-## Intro
-
-This app has been made to introduce people to Kotlin and make something fancy in the process.
-
-## Before we start
-
-To be able to edit and run this app, you need [Android Studio 3.0](https://developer.android.com/studio/index.html) or higher, since that version comes with Kotlin included out of box.
-
-After installing, choose **Check out project from Version Control** -> **Git** and put as **Git Repository URL**: https://github.com/CesarChretien/KotlinMeetupApp
-
-Run the project and happy hacking!
-
 # Step 1
 
 ## Introduction
@@ -31,3 +19,6 @@ If you already have an emulator set up, it should appear under the "Available vi
 ## Next step
 
 On successfully building, installing and launching the app, you should see a screen with the text "Good job! Time to go to step 2!" in the centre. Which means it's time to do exactly that. :)
+
+## Navigation
+* Next step: https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1
