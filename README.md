@@ -8,11 +8,10 @@ To be able to edit and run this app, you need [Android Studio 3.0](https://devel
 
 After installing, choose **Check out project from Version Control** -> **Git** and put as **Git Repository URL**: https://github.com/CesarChretien/KotlinMeetupApp
 
-Run the project and happy hacking!
-
 ## This is the master branch
 
-This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, check out this branch and run it. :) Otherwise you can check out [step-1](https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1).
+This branch contains the completed project. If you're in a rush, out of time or need to save the world but you *really* want to see the final product, just run the project by running it. :) Otherwise you can check out [step-1](https://github.com/CesarChretien/KotlinMeetupApp/tree/step-1) by typing the following in your console:
+`git checkout step-1`
 
 ## Navigation
 
