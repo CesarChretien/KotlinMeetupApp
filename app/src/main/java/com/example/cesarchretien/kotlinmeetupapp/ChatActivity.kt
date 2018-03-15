@@ -103,9 +103,8 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                 parentView.brieflyShowSnackbar("You really need to give permission to use the camera.")
             }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-            }
+
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         }
     }
 
