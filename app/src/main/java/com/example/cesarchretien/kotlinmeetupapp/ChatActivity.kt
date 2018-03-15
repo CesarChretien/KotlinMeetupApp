@@ -98,9 +98,14 @@ class ChatActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             //You have camera permission, so time to take a picture!
             startCameraForResult()
         }
-        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        else {
             //No camera permission, so you need to ask for it first.
-            parentView.brieflyShowSnackbar("You really need to give permission for camera usage...")
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                parentView.brieflyShowSnackbar("You really need to give permission to use the camera.")
+            }
+            else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+            }
         }
     }
 
